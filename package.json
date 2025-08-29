@@ -1,7 +1,7 @@
 {
   "name": "buzzcord",
   "version": "0.2.0-beta",
-  "description": "BuzzCord — FOSS social notifications bot for Discord (RSS, YouTube, Twitch)",
+  "description": "BuzzCord \u2014 FOSS social notifications bot for Discord (RSS, YouTube, Twitch)",
   "type": "module",
   "private": false,
   "engines": {
@@ -13,24 +13,24 @@
     "start": "node dist/index.js",
     "deploy:commands": "tsx src/deploy.ts",
     "test": "node --test",
-    "lint": "eslint . --ext .ts --config eslint.config.js",
-    "release": "echo release"
+    "lint": "eslint . --ext .ts --config eslint.config.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.5.0",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
-    "rss-parser": "^3.13.0"
+    "rss-parser": "^3.13.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-  "@types/better-sqlite3": "^7.6.12",
-  "@eslint/js": "^9.9.0",
-  "@typescript-eslint/eslint-plugin": "^8.6.0",
-  "@typescript-eslint/parser": "^8.6.0",
-  "eslint": "^9.9.0",
-  "typescript": "^5.6.2",
-  "tsx": "^4.19.0",
-  "@types/node": "^22.5.4"
-},
-  "packageManager": "npm@10"
+    "@eslint/js": "^9.9.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.5.4",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "eslint": "^9.9.0",
+    "globals": "^15.9.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.2"
+  }
 }

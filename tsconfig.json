@@ -10,5 +10,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src", "src/types"]
+  "include": [
+    "src"
+  ]
 }

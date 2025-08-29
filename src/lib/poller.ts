@@ -3,7 +3,7 @@ import { fetchRssItems } from "../providers/rss.js";
 import { fetchYT } from "../providers/youtube.js";
 import { fetchTwitch } from "../providers/twitch.js";
 import { Client, TextChannel } from "discord.js";
-import { sendNotification, renderTemplate } from "./notify.js";
+import { sendNotification } from "./notify.js";
 
 type Item = { guid: string; title: string; url: string; date: number; thumb?: string; author?: string };
 
@@ -21,6 +21,11 @@ function wasPosted(feedId:number, guid:string){
 }
 function updateLastPosted(subId:number){
   db.prepare("UPDATE subscriptions SET last_posted_at=? WHERE id=?").run(Date.now(), subId);
+}
+function providerChannelUrl(type: string, extId?: string) {
+  if (type === "youtube" && extId) return `https://www.youtube.com/channel/${extId}`;
+  if (type === "twitch" && extId) return `https://twitch.tv/${extId}`;
+  return undefined;
 }
 
 export async function tick(client: Client) {
@@ -41,8 +46,7 @@ export async function tick(client: Client) {
           if (s.throttle_sec && now - last < s.throttle_sec * 1000) continue;
           const ch = await client.channels.fetch(s.channel_id).catch(()=>null);
           if (!ch || !("send" in ch)) continue;
-          const msg = renderTemplate(s.template, f.type, it.title, it.url, it.author);
-          await sendNotification(ch as TextChannel, f.type, it.title, it.url, it.thumb, it.date, msg);
+          await sendNotification(ch as TextChannel, f.type, it.title, it.url, it.thumb, it.date, s.template, it.author, providerChannelUrl(f.type, f.ext_id));
           updateLastPosted(s.id);
         }
         markPosted(f.id, it.guid);

@@ -1,15 +1,32 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, TextChannel } from "discord.js";
+import { pickTheme } from "./theme.js";
 
-export function renderTemplate(tpl: string | null | undefined, type: string, title: string, url: string, author?: string) {
-  const base = type === "youtube" ? "📺 Nuovo video!" : type === "twitch" ? "🔴 Live su Twitch!" : "📰 Nuovo contenuto!";
-  const t = tpl && tpl.trim().length ? tpl : base;
-  return t.replaceAll("{title}", title).replaceAll("{url}", url).replaceAll("{author}", author || "").replaceAll("{type}", type);
+export function renderTemplate(tpl: string | null | undefined, type: string, title: string, url: string, author?: string, unix?: number) {
+  const t = tpl && tpl.trim().length ? tpl : "{badge} {title}\n<t:{unix}:R>";
+  return t
+    .replaceAll("{title}", title)
+    .replaceAll("{url}", url)
+    .replaceAll("{author}", author || "")
+    .replaceAll("{type}", type)
+    .replaceAll("{unix}", String(Math.floor((unix || Date.now())/1000)));
 }
 
-export async function sendNotification(ch: TextChannel, type: string, title: string, url: string, thumb?: string, timestamp?: number, content?: string) {
-  const color = type === "youtube" ? 0xff0000 : type === "twitch" ? 0x9146ff : 0x5865f2;
-  const embed = new EmbedBuilder().setTitle(title).setURL(url).setColor(color).setTimestamp(timestamp ? new Date(timestamp) : new Date()).setFooter({ text: type === "youtube" ? "YouTube" : type === "twitch" ? "Twitch" : "RSS Feed" });
+export async function sendNotification(ch: TextChannel, type: string, title: string, url: string, thumb?: string, timestamp?: number, template?: string, authorName?: string, channelUrl?: string) {
+  const t = pickTheme(type);
+  const content = renderTemplate((template || "").replaceAll("{badge}", t.emoji), type, title, url, authorName, timestamp);
+  const embed = new EmbedBuilder()
+    .setTitle(title)
+    .setURL(url)
+    .setColor(t.color)
+    .setTimestamp(timestamp ? new Date(timestamp) : new Date())
+    .setFooter({ text: "BuzzCord • Notifiche social" })
+    .setAuthor({ name: authorName ? `${t.label} • ${authorName}` : t.label, iconURL: t.icon || undefined });
   if (thumb) embed.setThumbnail(thumb);
-  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder().setLabel("Apri").setStyle(ButtonStyle.Link).setURL(url));
-  await ch.send({ content: content || undefined, embeds: [embed], components: [row] });
+
+  const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder().setLabel("Apri").setStyle(ButtonStyle.Link).setURL(url),
+    new ButtonBuilder().setLabel("Canale").setStyle(ButtonStyle.Link).setURL(channelUrl || url)
+  );
+
+  await ch.send({ content, embeds: [embed], components: [buttons] });
 }
