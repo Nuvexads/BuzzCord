@@ -1,4 +1,4 @@
-# FeedCord
+# BuzzCord
 
 **FeedCord** è un bot Discord open-source pensato per portare **notifiche e aggiornamenti** direttamente nei tuoi server.  
 Leggero, semplice da configurare e progettato per la community, ti permette di trasformare Discord in un vero hub informativo.  
