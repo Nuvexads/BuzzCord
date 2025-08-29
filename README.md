@@ -1,5 +1,12 @@
 # BuzzCord
 
+---
+
+[![GitHub commits since latest release](https://img.shields.io/github/commits-since/Nuvexads/BuzzCord/latest)](https://github.com/Nuvexads/BuzzCord/commits/)
+
+
+---
+
 **FeedCord** è un bot Discord open-source pensato per portare **notifiche e aggiornamenti** direttamente nei tuoi server.  
 Leggero, semplice da configurare e progettato per la community, ti permette di trasformare Discord in un vero hub informativo.  
 
