@@ -2,19 +2,31 @@
 import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
+import globals from 'globals';
 
 export default [
-  { ignores: ['dist', 'node_modules'] },
+  { ignores: ['dist', 'node_modules', '.eslintrc.cjs'] },
+
   js.configs.recommended,
+
   {
     files: ['**/*.ts'],
     languageOptions: {
       parser: tsParser,
-      parserOptions: { sourceType: 'module', ecmaVersion: 'latest' }
+      parserOptions: { sourceType: 'module', ecmaVersion: 'latest' },
+      globals: { ...globals.node }
     },
     plugins: { '@typescript-eslint': tsPlugin },
     rules: {
+      'no-undef': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
+    }
+  },
+
+  {
+    files: ['tests/**/*.ts'],
+    languageOptions: {
+      globals: { ...globals.node }
     }
   }
 ];
