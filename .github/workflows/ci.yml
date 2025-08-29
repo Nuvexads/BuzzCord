@@ -12,29 +12,26 @@ permissions:
 jobs:
   build-test-lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: BuzzCord
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node 20 with cache (lockfile present)
-        if: ${{ hashFiles('BuzzCord/package-lock.json') != '' }}
+        if: ${{ hashFiles('package-lock.json') != '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: BuzzCord/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Setup Node 20 (no cache)
-        if: ${{ hashFiles('BuzzCord/package-lock.json') == '' }}
+        if: ${{ hashFiles('package-lock.json') == '' }}
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Generate lockfile (first run only)
-        if: ${{ hashFiles('BuzzCord/package-lock.json') == '' }}
+        if: ${{ hashFiles('package-lock.json') == '' }}
         run: npm i --package-lock-only
 
       - name: Install
