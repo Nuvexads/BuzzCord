@@ -1,9 +1,12 @@
 {
   "name": "buzzcord",
-  "version": "0.1.0",
-  "description": "BuzzCord \u2014 FOSS social notifications bot for Discord (RSS, YouTube)",
+  "version": "0.2.0-beta",
+  "description": "BuzzCord — FOSS social notifications bot for Discord (RSS, YouTube, Twitch)",
   "type": "module",
   "private": false,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc -p tsconfig.json",
@@ -20,11 +23,13 @@
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.0",
     "@types/node": "^22.5.4",
-    "tsx": "^4.19.0",
-    "typescript": "^5.6.2",
-    "@typescript-eslint/parser": "^8.6.0",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
-    "eslint": "^9.9.0"
-  }
+    "@typescript-eslint/parser": "^8.6.0",
+    "eslint": "^9.9.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.2"
+  },
+  "packageManager": "npm@10"
 }
