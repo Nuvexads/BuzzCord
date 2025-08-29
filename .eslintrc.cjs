@@ -1,20 +1,7 @@
-// eslint.config.js
-import js from '@eslint/js';
-import tsParser from '@typescript-eslint/parser';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
+import "dotenv/config";
+import { REST, Routes } from "discord.js";
+import social from "./commands/social.js";
 
-export default [
-  { ignores: ['dist', 'node_modules'] },
-  js.configs.recommended,
-  {
-    files: ['**/*.ts'],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: { sourceType: 'module', ecmaVersion: 'latest' }
-    },
-    plugins: { '@typescript-eslint': tsPlugin },
-    rules: {
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
-    }
-  }
-];
+const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
+await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!), { body: [social.data.toJSON()] });
+console.log("Slash commands registrati");
