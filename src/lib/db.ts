@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   channel_id TEXT NOT NULL,
   feed_id INTEGER NOT NULL,
   throttle_sec INTEGER DEFAULT 60,
+  template TEXT,
+  last_posted_at INTEGER,
   FOREIGN KEY(feed_id) REFERENCES feeds(id)
 );
 CREATE TABLE IF NOT EXISTS posted_items (

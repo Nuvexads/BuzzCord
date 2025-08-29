@@ -1,12 +1,13 @@
 import db from "./db.js";
 import { fetchRssItems } from "../providers/rss.js";
 import { fetchYT } from "../providers/youtube.js";
+import { fetchTwitch } from "../providers/twitch.js";
 import { Client, TextChannel } from "discord.js";
-import { sendNotification } from "./notify.js";
+import { sendNotification, renderTemplate } from "./notify.js";
 
-type Item = { guid: string; title: string; url: string; date: number; thumb?: string };
+type Item = { guid: string; title: string; url: string; date: number; thumb?: string; author?: string };
 
-async function loadFeeds() {
+function loadFeeds() {
   return db.prepare("SELECT * FROM feeds").all();
 }
 function getSubs(feedId:number){
@@ -18,22 +19,31 @@ function markPosted(feedId:number, guid:string){
 function wasPosted(feedId:number, guid:string){
   return !!db.prepare("SELECT 1 FROM posted_items WHERE feed_id=? AND item_guid=?").get(feedId,guid);
 }
+function updateLastPosted(subId:number){
+  db.prepare("UPDATE subscriptions SET last_posted_at=? WHERE id=?").run(Date.now(), subId);
+}
 
 export async function tick(client: Client) {
-  const feeds = await loadFeeds();
+  const feeds = loadFeeds();
   for (const f of feeds) {
     try {
       let items: Item[] = [];
       if (f.type === "rss") items = await fetchRssItems(f.url);
       else if (f.type === "youtube") items = await fetchYT(f.ext_id);
+      else if (f.type === "twitch") items = await fetchTwitch(f.ext_id);
       items.sort((a,b)=>a.date-b.date);
       const subs = getSubs(f.id);
       for (const it of items) {
         if (wasPosted(f.id, it.guid)) continue;
         for (const s of subs) {
+          const now = Date.now();
+          const last = s.last_posted_at || 0;
+          if (s.throttle_sec && now - last < s.throttle_sec * 1000) continue;
           const ch = await client.channels.fetch(s.channel_id).catch(()=>null);
           if (!ch || !("send" in ch)) continue;
-          await sendNotification(ch as TextChannel, f.type, it.title, it.url, it.thumb, it.date);
+          const msg = renderTemplate(s.template, f.type, it.title, it.url, it.author);
+          await sendNotification(ch as TextChannel, f.type, it.title, it.url, it.thumb, it.date, msg);
+          updateLastPosted(s.id);
         }
         markPosted(f.id, it.guid);
       }

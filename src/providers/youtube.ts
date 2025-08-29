@@ -6,6 +6,7 @@ export function ytUploadsFeed(channelId: string) {
 export async function fetchYT(channelId: string) {
   const url = ytUploadsFeed(channelId);
   const feed = await parser.parseURL(url);
+  const source = feed.title || "YouTube";
   return (feed.items || []).map((i: any) => {
     const id = i.videoId || (i.id ? String(i.id).split(":").pop() : undefined);
     const link = i.link || (id ? `https://youtu.be/${id}` : "");
@@ -15,7 +16,8 @@ export async function fetchYT(channelId: string) {
       title: i.title || "Nuovo video",
       url: link,
       date: i.isoDate ? Date.parse(i.isoDate as string) : Date.now(),
-      thumb
+      thumb,
+      author: i.author || source
     };
   });
 }
