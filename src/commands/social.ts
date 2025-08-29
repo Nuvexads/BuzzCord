@@ -1,5 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
-import db from "../lib/db.js";
+import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";import db from "../lib/db.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -16,44 +15,58 @@ export default {
     const sub = inter.options.getSubcommand();
     if (sub === "addrss") {
       const url = inter.options.getString("url", true);
-      const existing = db.prepare("SELECT id FROM feeds WHERE type='rss' AND url=?").get(url);
-      const feedId = existing?.id || db.prepare("INSERT INTO feeds(type,url) VALUES('rss',?)").run(url).lastInsertRowid;
+      const existing = db.prepare("SELECT id FROM feeds WHERE type='rss' AND url=?").get(url) as { id: number } | undefined;
+      const feedId = existing?.id ?? (db.prepare("INSERT INTO feeds(type,url) VALUES('rss',?)").run(url).lastInsertRowid as number);
       const subr = db.prepare("INSERT INTO subscriptions(guild_id,channel_id,feed_id) VALUES (?,?,?)").run(inter.guildId, inter.channelId, feedId);
       await inter.reply({ content: `RSS aggiunto (sub #${subr.lastInsertRowid}) → ${url}` });
-    } else if (sub === "addyoutube") {
+      return;
+    }
+    if (sub === "addyoutube") {
       const id = inter.options.getString("channel_id", true);
-      const existing = db.prepare("SELECT id FROM feeds WHERE type='youtube' AND ext_id=?").get(id);
-      const feedId = existing?.id || db.prepare("INSERT INTO feeds(type,ext_id) VALUES('youtube',?)").run(id).lastInsertRowid;
+      const existing = db.prepare("SELECT id FROM feeds WHERE type='youtube' AND ext_id=?").get(id) as { id: number } | undefined;
+      const feedId = existing?.id ?? (db.prepare("INSERT INTO feeds(type,ext_id) VALUES('youtube',?)").run(id).lastInsertRowid as number);
       const subr = db.prepare("INSERT INTO subscriptions(guild_id,channel_id,feed_id) VALUES (?,?,?)").run(inter.guildId, inter.channelId, feedId);
       await inter.reply({ content: `YouTube aggiunto (sub #${subr.lastInsertRowid}) → channel_id=${id}` });
-    } else if (sub === "addtwitch") {
+      return;
+    }
+    if (sub === "addtwitch") {
       const u = inter.options.getString("user", true);
-      const existing = db.prepare("SELECT id FROM feeds WHERE type='twitch' AND ext_id=?").get(u);
-      const feedId = existing?.id || db.prepare("INSERT INTO feeds(type,ext_id) VALUES('twitch',?)").run(u).lastInsertRowid;
+      const existing = db.prepare("SELECT id FROM feeds WHERE type='twitch' AND ext_id=?").get(u) as { id: number } | undefined;
+      const feedId = existing?.id ?? (db.prepare("INSERT INTO feeds(type,ext_id) VALUES('twitch',?)").run(u).lastInsertRowid as number);
       const subr = db.prepare("INSERT INTO subscriptions(guild_id,channel_id,feed_id) VALUES (?,?,?)").run(inter.guildId, inter.channelId, feedId);
       await inter.reply({ content: `Twitch aggiunto (sub #${subr.lastInsertRowid}) → ${u}` });
-    } else if (sub === "list") {
-      const rows = db.prepare("SELECT s.id as sid, f.type, IFNULL(f.url, f.ext_id) as ref, s.channel_id, s.throttle_sec, IFNULL(s.template,'') as template FROM subscriptions s JOIN feeds f ON s.feed_id=f.id WHERE s.guild_id=?").all(inter.guildId);
+      return;
+    }
+    if (sub === "list") {
+      type Row = { sid: number; type: string; ref: string; channel_id: string; throttle_sec: number | null; template: string | null };
+      const rows = db.prepare("SELECT s.id as sid, f.type, IFNULL(f.url, f.ext_id) as ref, s.channel_id, s.throttle_sec, IFNULL(s.template,'') as template FROM subscriptions s JOIN feeds f ON s.feed_id=f.id WHERE s.guild_id=?").all(inter.guildId) as Row[];
       if (!rows.length) {
         await inter.reply({ content: "Nessuna sottoscrizione.", ephemeral: true });
         return;
       }
-      const out = rows.map(r=>`#${r.sid} • ${r.type} • ${r.ref} → <#${r.channel_id}> • throttle=${r.throttle_sec}s`).join("\n");
+      const out = rows.map((r: Row) => `#${r.sid} • ${r.type} • ${r.ref} → <#${r.channel_id}> • throttle=${r.throttle_sec ?? 60}s`).join("\n");
       await inter.reply("Sottoscrizioni:\n" + out);
-    } else if (sub === "remove") {
+      return;
+    }
+    if (sub === "remove") {
       const sid = inter.options.getInteger("subscription_id", true);
       db.prepare("DELETE FROM subscriptions WHERE id=? AND guild_id=?").run(sid, inter.guildId);
       await inter.reply(`Rimossa sottoscrizione #${sid}`);
-    } else if (sub === "throttle") {
+      return;
+    }
+    if (sub === "throttle") {
       const sid = inter.options.getInteger("subscription_id", true);
       const secs = inter.options.getInteger("seconds", true);
       db.prepare("UPDATE subscriptions SET throttle_sec=? WHERE id=? AND guild_id=?").run(secs, sid, inter.guildId);
       await inter.reply(`Throttle impostato a ${secs}s per sub #${sid}`);
-    } else if (sub === "template") {
+      return;
+    }
+    if (sub === "template") {
       const sid = inter.options.getInteger("subscription_id", true);
       const text = inter.options.getString("text", true);
       db.prepare("UPDATE subscriptions SET template=? WHERE id=? AND guild_id=?").run(text, sid, inter.guildId);
       await inter.reply(`Template aggiornato per sub #${sid}`);
+      return;
     }
   }
 };
