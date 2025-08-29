@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 type TwitchToken = { access_token: string; expires_in: number; obtained_at: number };
 let token: TwitchToken | null = null;
 
@@ -17,9 +16,10 @@ async function getToken() {
 export async function resolveUser(loginOrId: string) {
   const access = await getToken();
   const isId = /^[0-9]+$/.test(loginOrId);
-  const qs = new URLSearchParams();
-  if (isId) qs.set("id", loginOrId); else qs.set("login", loginOrId);
-  const res = await fetch("https://api.twitch.tv/helix/users?" + qs.toString(), { headers: { "Client-Id": process.env.TWITCH_CLIENT_ID as string, "Authorization": "Bearer " + access } });
+  const qs = new URLSearchParams(isId ? { id: loginOrId } : { login: loginOrId });
+  const res = await fetch("https://api.twitch.tv/helix/users?" + qs.toString(), {
+    headers: { "Client-Id": process.env.TWITCH_CLIENT_ID as string, "Authorization": "Bearer " + access }
+  });
   const j: any = await res.json();
   return j.data && j.data.length ? j.data[0] : null;
 }
@@ -29,7 +29,9 @@ export async function fetchTwitch(userIdOrLogin: string) {
   if (!user) return [];
   const user_id = user.id;
   const access = await getToken();
-  const res = await fetch("https://api.twitch.tv/helix/streams?user_id=" + user_id, { headers: { "Client-Id": process.env.TWITCH_CLIENT_ID as string, "Authorization": "Bearer " + access } });
+  const res = await fetch("https://api.twitch.tv/helix/streams?user_id=" + user_id, {
+    headers: { "Client-Id": process.env.TWITCH_CLIENT_ID as string, "Authorization": "Bearer " + access }
+  });
   const j: any = await res.json();
   if (!j.data || !j.data.length) return [];
   const s = j.data[0];
