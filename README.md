@@ -3,6 +3,7 @@
 ---
 
 [![GitHub commits since latest release](https://img.shields.io/github/commits-since/Nuvexads/BuzzCord/latest)](https://github.com/Nuvexads/BuzzCord/commits/)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Nuvexads/BuzzCord)](https://github.com/Nuvexads/BuzzCord/commits/)
 
 
 ---
