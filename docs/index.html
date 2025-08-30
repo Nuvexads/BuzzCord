@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="it" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BuzzCord Wiki — Single-File</title>
+  <meta name="description" content="Wiki web di BuzzCord in un singolo file: sidebar, ricerca, dark mode, animazioni." />
+  <meta name="theme-color" content="#5865F2" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' fill='white'/%3E%3Crect x='16' y='20' width='96' height='64' rx='16' ry='16' fill='none' stroke='%235865F2' stroke-width='8'/%3E%3Cpath d='M56 84l-16 24 36-24' fill='%235865F2'/%3E%3Cpath d='M32 84h32' stroke='%235865F2' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M68 36l-10 18h12l-10 18' fill='%235865F2'/%3E%3C/svg%3E" />
+  <script>
+    ;(() => {
+      const t = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      if (t === 'dark' || (!t && prefersDark)) document.documentElement.classList.add('dark')
+    })()
+  </script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: { buzz: '#5865F2', base: { light: '#f8fafc', dark: '#0b1021' } },
+          boxShadow: { glow: '0 0 0 3px rgba(88,101,242,0.25)' },
+          keyframes: {
+            slideIn: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(0)' } },
+            fadeUp: { '0%': { opacity: 0, transform: 'translateY(8px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            pingSoft: { '75%,100%': { transform: 'scale(1.2)', opacity: 0 } }
+          },
+          animation: {
+            slideIn: 'slideIn .35s ease-out',
+            fadeUp: 'fadeUp .4s ease-out',
+            pingSoft: 'pingSoft 1s cubic-bezier(0,0,.2,1) infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html,body{height:100%}
+    .scrollbar-thin::-webkit-scrollbar{width:8px}
+    .scrollbar-thin::-webkit-scrollbar-thumb{background:#3b3b4f;border-radius:6px}
+    .active-link{background-color:rgb(88 101 242 / .15); color:#5865F2}
+    .section-anchor{opacity:0; transition:opacity .2s}
+    .doc-section:hover .section-anchor{opacity:1}
+  </style>
+</head>
+<body class="bg-base-light text-slate-800 dark:bg-base-dark dark:text-slate-100 selection:bg-buzz/20">
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-white/70 backdrop-blur dark:bg-base-dark/70">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3">
+      <button id="btnSidebar" class="lg:hidden inline-flex items-center justify-center rounded-xl border border-slate-300/30 px-3 py-2 text-sm hover:shadow-glow dark:border-white/10" aria-label="Apri sidebar">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <a href="#intro" class="group flex items-center gap-2">
+        <div class="relative">
+          <span class="absolute inset-0 rounded-lg bg-buzz/20 blur-sm"></span>
+          <span class="relative inline-flex h-8 w-8 items-center justify-center rounded-lg bg-buzz text-white">B</span>
+        </div>
+        <div class="leading-tight">
+          <div class="font-semibold">BuzzCord</div>
+          <div class="text-xs opacity-70">Wiki Web</div>
+        </div>
+      </a>
+
+      <div class="mx-4 hidden h-6 w-px bg-slate-300/40 dark:bg-white/10 lg:block"></div>
+
+      <div class="relative flex-1 max-w-xl">
+        <input id="search" type="search" placeholder="Cerca nella documentazione…" class="w-full rounded-xl border border-slate-300/50 bg-white/70 px-4 py-2 pr-10 text-sm placeholder:opacity-60 shadow-sm focus:outline-none focus:ring-4 focus:ring-buzz/20 dark:border-white/10 dark:bg-base-dark/60" />
+        <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
+      </div>
+
+      <div class="ml-auto flex items-center gap-2">
+        <a href="https://github.com/Nuvexads/BuzzCord" target="_blank" class="hidden sm:inline-flex items-center gap-2 rounded-xl border border-slate-300/40 px-3 py-2 text-sm hover:shadow-glow dark:border-white/10">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.07 3.29 9.36 7.86 10.87.58.1.79-.25.79-.56l-.01-2.01c-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.29-1.71-1.29-1.71-1.06-.73.08-.72.08-.72 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.11-.76.41-1.27.75-1.56-2.55-.29-5.23-1.27-5.23-5.65 0-1.25.45-2.27 1.2-3.07-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.17.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.48 3.17-1.17 3.17-1.17.63 1.59.23 2.76.12 3.05.75.8 1.2 1.82 1.2 3.07 0 4.39-2.69 5.35-5.24 5.64.42.36.79 1.07.79 2.16l-.01 3.19c0 .31.21.67.8.55A11.51 11.51 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+          <span>GitHub</span>
+        </a>
+        <button id="toggleTheme" class="inline-flex items-center justify-center rounded-xl border border-slate-300/40 p-2 hover:shadow-glow dark:border-white/10" aria-label="Toggle dark mode">
+          <svg id="iconSun" class="h-5 w-5 hidden dark:inline" viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84 5.34 3.42 3.92 4.84l1.42 1.42 1.42-1.42ZM1 13h3v-2H1v2Zm10 10h2v-3h-2v3Zm8.66-18.16 1.42-1.42-1.42-1.42-1.42 1.42 1.42 1.42ZM20 13h3v-2h-3v2ZM6.76 19.16l-1.42 1.42 1.42 1.42 1.42-1.42-1.42-1.42Zm12.02 0-1.42 1.42 1.42 1.42 1.42-1.42-1.42-1.42ZM12 6a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"/></svg>
+          <svg id="iconMoon" class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13.03A9 9 0 1 1 11 2.36a7 7 0 1 0 10.64 10.67Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-7xl px-4 py-6 lg:py-8 flex gap-6">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-72 -translate-x-full overflow-y-auto border-r border-white/10 bg-white/95 p-4 backdrop-blur transition-transform duration-300 dark:bg-base-dark/90 lg:sticky lg:top-[56px] lg:translate-x-0 lg:h-[calc(100vh-56px)] lg:bg-transparent lg:backdrop-blur-0 lg:p-0 lg:border-0">
+      <nav class="scrollbar-thin lg:pr-4">
+        <div class="mb-4 flex items-center justify-between">
+          <span class="text-sm font-semibold uppercase tracking-wider opacity-70">Documentazione</span>
+          <button id="btnSidebarClose" class="lg:hidden rounded-lg p-2 hover:bg-slate-200/50 dark:hover:bg-white/5" aria-label="Chiudi sidebar">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m6 18 12-12M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <ul class="space-y-1 text-sm">
+          <li><a href="#intro" class="group flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-slate-200/60 dark:hover:bg-white/5"><span class="h-1.5 w-1.5 rounded-full bg-buzz/70"></span><span>Home</span></a></li>
+
+          <li>
+            <button data-accordion="guida" class="w-full flex items-center justify-between rounded-lg px-3 py-2 hover:bg-slate-200/60 dark:hover:bg-white/5">
+              <span class="font-semibold">Guida</span>
+              <svg class="h-4 w-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul id="group-guida" class="mt-1 ml-2 space-y-1 hidden">
+              <li><a href="#Getting-Started" class="navlink block rounded-lg px-3 py-2">Getting Started</a></li>
+              <li><a href="#Configurazione" class="navlink block rounded-lg px-3 py-2">Configurazione</a></li>
+              <li><a href="#Comandi" class="navlink block rounded-lg px-3 py-2">Comandi</a></li>
+              <li><a href="#Template-Estetica" class="navlink block rounded-lg px-3 py-2">Template & Estetica</a></li>
+              <li><a href="#Provider" class="navlink block rounded-lg px-3 py-2">Provider</a></li>
+              <li><a href="#Filtri-Quiet-Hours" class="navlink block rounded-lg px-3 py-2">Filtri & Quiet Hours</a></li>
+              <li><a href="#Database-Migrazioni" class="navlink block rounded-lg px-3 py-2">Database & Migrazioni</a></li>
+            </ul>
+          </li>
+
+          <li>
+            <button data-accordion="operativita" class="w-full flex items-center justify-between rounded-lg px-3 py-2 hover:bg-slate-200/60 dark:hover:bg-white/5">
+              <span class="font-semibold">Operatività</span>
+              <svg class="h-4 w-4 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul id="group-operativita" class="mt-1 ml-2 space-y-1 hidden">
+              <li><a href="#Operativita-CI-CD" class="navlink block rounded-lg px-3 py-2">CI/CD</a></li>
+              <li><a href="#Troubleshooting" class="navlink block rounded-lg px-3 py-2">Troubleshooting</a></li>
+              <li><a href="#FAQ" class="navlink block rounded-lg px-3 py-2">FAQ</a></li>
+              <li><a href="#Sicurezza-Privacy" class="navlink block rounded-lg px-3 py-2">Sicurezza & Privacy</a></li>
+            </ul>
+          </li>
+
+          <li><a href="#Contribuire" class="navlink block rounded-lg px-3 py-2">Contribuire</a></li>
+          <li><a href="#Roadmap" class="navlink block rounded-lg px-3 py-2">Roadmap</a></li>
+          <li><a href="#Changelog" class="navlink block rounded-lg px-3 py-2">Changelog</a></li>
+        </ul>
+
+        <div class="mt-6 rounded-xl border border-white/10 bg-buzz/10 p-3 text-xs">
+          <div class="mb-2 font-semibold">Powered by BuzzCord</div>
+          <div class="opacity-80">Premi <kbd class="rounded bg-white/20 px-1">/</kbd> per cercare. T per il tema.</div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="mx-auto w-full lg:pl-72">
+      <div id="resultsInfo" class="hidden mb-4 rounded-xl border border-white/10 bg-yellow-100/60 px-4 py-2 text-sm text-yellow-900 dark:bg-yellow-500/10 dark:text-yellow-100"></div>
+
+      <section id="intro" class="doc-section animate-fadeUp">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h1 class="group relative inline-flex items-center gap-2">BuzzCord <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#intro">🔗 Copia link</button></h1>
+          <p>Benvenuto nella wiki di <strong>BuzzCord</strong>. Usa la sidebar per navigare tra le sezioni. Questo file è una versione single-page con ricerca client-side, dark mode e animazioni.</p>
+          <div class="not-prose mt-4 grid gap-4 sm:grid-cols-2">
+            <a href="#Getting-Started" class="group rounded-2xl border border-white/10 bg-white/60 p-4 shadow-sm ring-1 ring-black/5 transition hover:shadow-lg hover:ring-buzz/30 dark:bg-white/5">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Getting Started</h3>
+                <span class="inline-flex h-2 w-2 animate-pingSoft rounded-full bg-buzz/70"></span>
+              </div>
+              <p class="mt-1 text-sm opacity-70">Setup rapido e avvio locale.</p>
+            </a>
+            <a href="#Configurazione" class="group rounded-2xl border border-white/10 bg-white/60 p-4 shadow-sm ring-1 ring-black/5 transition hover:shadow-lg hover:ring-buzz/30 dark:bg-white/5">
+              <h3 class="font-semibold">Configurazione</h3>
+              <p class="mt-1 text-sm opacity-70">Parametri base, ambiente e provider.</p>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <section id="Getting-Started" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Getting Started <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Getting-Started">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+          <pre class="rounded-xl border border-white/10 bg-slate-900/90 p-4 text-slate-100 overflow-x-auto"><code>git clone https://github.com/Nuvexads/BuzzCord
+cd BuzzCord</code></pre>
+        </article>
+      </section>
+
+      <section id="Configurazione" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Configurazione <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Configurazione">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Comandi" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Comandi <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Comandi">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Template-Estetica" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Template & Estetica <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Template-Estetica">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Provider" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Provider <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Provider">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Filtri-Quiet-Hours" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Filtri & Quiet Hours <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Filtri-Quiet-Hours">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Database-Migrazioni" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Database & Migrazioni <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Database-Migrazioni">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Operativita-CI-CD" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Operatività CI/CD <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Operativita-CI-CD">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Troubleshooting" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Troubleshooting <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Troubleshooting">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="FAQ" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">FAQ <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#FAQ">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Sicurezza-Privacy" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Sicurezza & Privacy <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Sicurezza-Privacy">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Contribuire" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Contribuire <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Contribuire">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Roadmap" class="doc-section animate-fadeUp mt-12">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Roadmap <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Roadmap">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <section id="Changelog" class="doc-section animate-fadeUp mt-12 mb-16">
+        <article class="prose prose-slate dark:prose-invert max-w-none">
+          <h2 class="group inline-flex items-center gap-2">Changelog <button class="section-anchor rounded-md border border-white/10 px-2 py-1 text-xs hover:bg-white/10" data-copy="#Changelog">🔗</button></h2>
+          <p>Contenuti in arrivo.</p>
+        </article>
+      </section>
+
+      <footer class="mt-10 border-t border-white/10 py-8 text-sm opacity-80">
+        <div class="flex items-center justify-between">
+          <span>© <span id="year"></span> BuzzCord · MIT</span>
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-buzz/80"></span> Online</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <button id="backToTop" class="fixed bottom-6 right-6 hidden rounded-full bg-buzz p-3 text-white shadow-lg transition hover:shadow-xl" aria-label="Torna su">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="m7 14 5-5 5 5H7Z"/></svg>
+  </button>
+
+  <script>
+    const $ = (s, sc) => (sc || document).querySelector(s)
+    const $$ = (s, sc) => [...(sc || document).querySelectorAll(s)]
+
+    const sidebar = $('#sidebar')
+    $('#btnSidebar')?.addEventListener('click', () => sidebar.classList.toggle('-translate-x-full'))
+    $('#btnSidebarClose')?.addEventListener('click', () => sidebar.classList.add('-translate-x-full'))
+    addEventListener('keydown', e => { if (e.key === 'Escape') sidebar.classList.add('-translate-x-full') })
+
+    const accordions = $$('[data-accordion]')
+    accordions.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-accordion')
+        const group = $('#group-' + id)
+        const icon = btn.querySelector('svg')
+        group.classList.toggle('hidden')
+        icon.classList.toggle('rotate-180')
+      })
+    })
+
+    const navLinks = $$('.navlink, aside a[href^="#"]')
+    const sections = $$('.doc-section')
+    const byId = id => document.getElementById(id.replace('#',''))
+
+    function setActive(id) {
+      navLinks.forEach(l => l.classList.remove('active-link'))
+      const link = $('a[href="' + id + '"]')
+      if (link) link.classList.add('active-link')
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          const id = '#' + en.target.id
+          history.replaceState(null, '', id)
+          setActive(id)
+        }
+      })
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 })
+    sections.forEach(sec => observer.observe(sec))
+
+    navLinks.forEach(l => l.addEventListener('click', () => setTimeout(() => setActive(l.getAttribute('href')), 150)))
+
+    const toggleTheme = $('#toggleTheme')
+    toggleTheme?.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark')
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')
+    })
+    addEventListener('keydown', e => { if (e.key.toLowerCase() === 't') toggleTheme?.click() })
+
+    const search = $('#search')
+    const resultsInfo = $('#resultsInfo')
+    const data = sections.map(sec => ({ id: '#' + sec.id, text: sec.textContent.toLowerCase() }))
+    function doSearch(q) {
+      if (!q) {
+        sections.forEach(s => s.classList.remove('hidden'))
+        resultsInfo.classList.add('hidden')
+        return
+      }
+      const k = q.toLowerCase().trim()
+      let visible = 0
+      sections.forEach(s => {
+        const ok = byId(s.id).textContent.toLowerCase().includes(k)
+        s.classList.toggle('hidden', !ok)
+        if (ok) visible++
+      })
+      resultsInfo.textContent = visible ? `Risultati: ${visible}` : 'Nessun risultato'
+      resultsInfo.classList.remove('hidden')
+    }
+    search?.addEventListener('input', e => doSearch(e.target.value))
+    addEventListener('keydown', e => { if (e.key === '/' && document.activeElement !== search) { e.preventDefault(); search.focus() } })
+
+    $$('#backToTop').forEach(btn => btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' })))
+    const btt = $('#backToTop')
+    addEventListener('scroll', () => btt.classList.toggle('hidden', scrollY < 600))
+
+    const year = $('#year'); if (year) year.textContent = new Date().getFullYear()
+
+    $$('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const hash = btn.getAttribute('data-copy')
+        const url = location.origin + location.pathname + hash
+        try { await navigator.clipboard.writeText(url) } catch {}
+        btn.textContent = '✓'
+        setTimeout(() => (btn.textContent = '🔗'), 1000)
+      })
+    })
+  </script>
+</body>
+</html>
