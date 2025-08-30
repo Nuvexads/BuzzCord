@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS feeds (
   url TEXT,
   ext_id TEXT,
   title TEXT,
+  etag TEXT,
+  last_modified TEXT,
   last_checked INTEGER DEFAULT 0,
   last_error TEXT
 );
@@ -22,6 +24,8 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   throttle_sec INTEGER DEFAULT 60,
   template TEXT,
   last_posted_at INTEGER,
+  include_filter TEXT,
+  exclude_filter TEXT,
   FOREIGN KEY(feed_id) REFERENCES feeds(id)
 );
 CREATE TABLE IF NOT EXISTS posted_items (
@@ -30,6 +34,16 @@ CREATE TABLE IF NOT EXISTS posted_items (
   item_guid TEXT NOT NULL,
   posted_at INTEGER NOT NULL,
   UNIQUE(feed_id, item_guid)
+);
+CREATE TABLE IF NOT EXISTS guild_config (
+  guild_id TEXT PRIMARY KEY,
+  quiet_start_min INTEGER,
+  quiet_end_min INTEGER
+);
+CREATE TABLE IF NOT EXISTS guild_defaults (
+  guild_id TEXT PRIMARY KEY,
+  preset TEXT,
+  template TEXT
 );
 `);
 export default db;

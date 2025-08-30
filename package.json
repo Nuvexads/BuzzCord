@@ -1,6 +1,6 @@
 {
   "name": "buzzcord",
-  "version": "0.2.0-beta",
+  "version": "0.3.0",
   "description": "BuzzCord \u2014 FOSS social notifications bot for Discord (RSS, YouTube, Twitch)",
   "type": "module",
   "private": false,
@@ -13,7 +13,8 @@
     "start": "node dist/index.js",
     "deploy:commands": "tsx src/deploy.ts",
     "test": "node --test",
-    "lint": "eslint . --ext .ts --config eslint.config.js"
+    "lint": "eslint src --ext .ts --config eslint.config.js",
+    "migrate": "tsx src/migrate.ts"
   },
   "dependencies": {
     "better-sqlite3": "^11.5.0",
