@@ -35,5 +35,9 @@ try {
   console.error("Migrazione fallita:", e);
   process.exitCode = 1;
 } finally {
+<<<<<<< Updated upstream
   try { (db as any).close?.(); } catch (e) { void e; }
+=======
+  try { (db as any).close?.(); } catch {}
+>>>>>>> Stashed changes
 }
