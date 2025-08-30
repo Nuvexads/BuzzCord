@@ -31,7 +31,7 @@ Questo Codice di Condotta si applica in tutti gli spazi del progetto e quando un
 
 ## Segnalazioni
 Comportamenti abusivi, molesti o altrimenti inaccettabili possono essere segnalati al team di progetto via:
-- **Email**: `<inserisci-email-di-contatto>`  
+- **Email**: `assistenza@nuvexabot.it`  
 - **Security advisory** su GitHub: apri un *privately disclosed security report* se la segnalazione riguarda la sicurezza.
 
 Tutte le denunce saranno esaminate tempestivamente ed equamente. Il team è tenuto a mantenere la **riservatezza** riguardo alla persona che effettua la segnalazione.
