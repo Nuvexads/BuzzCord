@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="it" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BuzzCord — Feed & Notifiche per Discord (Open Source)</title>
+  <meta name="description" content="BuzzCord: bot open-source per feed e notifiche su Discord. Identità visiva “Bolt & Bubble”, asset scaricabili (SVG/PNG), banner 1280×640 e guida rapida." />
+  <link rel="canonical" href="https://buzzcord.example/" />
+  <meta property="og:title" content="BuzzCord — Feed & Notifiche per Discord (Open Source)" />
+  <meta property="og:description" content="Bot open-source per portare feed, alert e automazioni nel tuo server Discord." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b1021" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='200' fill='%235865F2'/%3E%3Cpath d='M515 275l-90 210h130l-70 172 188-246h-120l62-136z' fill='%23FF0000'/%3E%3C/svg%3E" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --blurple:#5865F2; --red:#FF0000; --ink:#0B1021; }
+    .grid-bg::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.08;
+      background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+                       linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size:24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 selection:bg-indigo-200/60 dark:bg-[#0B1021] dark:text-slate-100">
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/50 dark:supports-[backdrop-filter]:bg-[#0B1021]/50">
+    <div class="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="size-9 rounded-xl bg-white dark:bg-white/10 ring-1 ring-black/5 dark:ring-white/10 grid place-items-center">
+          <!-- Mini logo -->
+          <svg viewBox="0 0 1024 1024" class="size-6" aria-hidden="true">
+            <rect x="160" y="160" width="560" height="420" rx="120" fill="none" stroke="#5865F2" stroke-width="80" stroke-linejoin="round"/>
+            <path d="M420 640 L420 760 L540 700" fill="none" stroke="#5865F2" stroke-width="80" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M552 260 L470 460 H590 L490 700 L714 420 H592 L652 260 Z" fill="#FF0000"/>
+          </svg>
+        </div>
+        <span class="text-lg font-extrabold tracking-tight">BuzzCord</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#features" class="opacity-80 hover:opacity-100">Funzioni</a>
+        <a href="#brand" class="opacity-80 hover:opacity-100">Brand Kit</a>
+        <a href="#open-source" class="opacity-80 hover:opacity-100">Open Source</a>
+        <a href="#setup" class="opacity-80 hover:opacity-100">Setup</a>
+        <a href="https://github.com/Nuvexads/BuzzCord/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 font-semibold text-indigo-600 dark:text-indigo-300 hover:underline">
+          <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 0 12.6c0 5.3 3.4 9.8 8.1 11.4.6.1.8-.3.8-.6v-2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.2 1.8 1.2 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.6-1.4-5.6-6.1 0-1.3.5-2.4 1.2-3.3-.1-.3-.6-1.6.1-3.3 0 0 1-.3 3.4 1.2a11.6 11.6 0 0 1 6.1 0c2.4-1.5 3.4-1.2 3.4-1.2.7 1.7.2 3 .1 3.3.8.9 1.2 2 1.2 3.3 0 4.7-2.9 5.8-5.6 6.1.4.3.7 1 .7 2v3c0 .3.2.7.8.6A12.1 12.1 0 0 0 24 12.6 12 12 0 0 0 12 .5Z"/></svg>
+          GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg"></div>
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:py-28 relative">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h1 class="text-4xl/tight md:text-5xl/tight font-black tracking-tight">
+            BuzzCord — feed & notifiche <span class="text-indigo-600 dark:text-indigo-300">super veloci</span> per il tuo server Discord
+          </h1>
+          <p class="mt-5 text-lg/relaxed text-slate-600 dark:text-slate-300">
+            Bot open-source pensato per portare <span class="font-semibold">RSS, YouTube, Twitch, GitHub</span> e altri feed nel canale giusto, con
+            alert istantanei e moderazione sicura. Identità visiva <em>“Bolt & Bubble”</em>: chat bubble con saetta rossa.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="https://github.com/Nuvexads/BuzzCord/" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-3 shadow">
+              <svg viewBox="0 0 24 24" class="size-5" fill="currentColor"><path d="M12 .5A12 12 0 0 0 0 12.6c0 5.3 3.4 9.8 8.1 11.4.6.1.8-.3.8-.6v-2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.2 1.8 1.2 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.6-1.4-5.6-6.1 0-1.3.5-2.4 1.2-3.3-.1-.3-.6-1.6.1-3.3 0 0 1-.3 3.4 1.2a11.6 11.6 0 0 1 6.1 0c2.4-1.5 3.4-1.2 3.4-1.2.7 1.7.2 3 .1 3.3.8.9 1.2 2 1.2 3.3 0 4.7-2.9 5.8-5.6 6.1.4.3.7 1 .7 2v3c0 .3.2.7.8.6A12.1 12.1 0 0 0 24 12.6 12 12 0 0 0 12 .5Z"/></svg>
+              Codice sorgente
+            </a>
+            <a href="#setup" class="inline-flex items-center gap-2 rounded-xl border border-slate-300/50 dark:border-white/10 px-5 py-3 font-semibold">
+              ⏱️ Self-host in 2 min
+            </a>
+            <a href="#brand" class="inline-flex items-center gap-2 rounded-xl border border-slate-300/50 dark:border-white/10 px-5 py-3 font-semibold">
+              🎨 Brand kit
+            </a>
+          </div>
+
+          <div class="mt-6 text-sm text-slate-500 dark:text-slate-400">
+            Palette: <span class="font-mono">#5865F2</span> (Discord blurple) + <span class="font-mono">#FF0000</span> (accento rosso).
+          </div>
+        </div>
+
+        <!-- Big Logo Card -->
+        <div class="relative">
+          <div class="rounded-3xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] shadow-xl p-6">
+            <div class="aspect-[1/1] rounded-2xl grid place-items-center bg-slate-50 dark:bg-black/30 relative overflow-hidden">
+              <!-- Safe area indicator (80%) -->
+              <div class="absolute inset-[10%] rounded-2xl border-2 border-dashed border-slate-300/60 dark:border-white/20 pointer-events-none"></div>
+
+              <!-- Master SVG -->
+              <svg id="buzzLogo" viewBox="0 0 1024 1024" class="w-[70%] h-auto drop-shadow">
+                <!-- Bubble (monoline) -->
+                <rect x="160" y="160" width="560" height="420" rx="120" fill="none"
+                      stroke="#5865F2" stroke-width="80" stroke-linejoin="round"/>
+                <!-- Tail -->
+                <path d="M420 640 L420 760 L540 700" fill="none" stroke="#5865F2" stroke-width="80"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Lightning (alert) -->
+                <path d="M560 260 L480 460 H604 L496 700 L720 420 H598 L660 260 Z" fill="#FF0000"/>
+              </svg>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <button onclick="downloadSVG()"
+                class="px-4 py-2 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold">
+                Scarica SVG
+              </button>
+              <div class="flex items-center gap-2">
+                <span class="text-sm opacity-70">PNG:</span>
+                <div class="flex flex-wrap gap-2">
+                  <button class="px-3 py-1.5 rounded-lg border border-slate-300/60 dark:border-white/10" onclick="downloadPNG(32)">32</button>
+                  <button class="px-3 py-1.5 rounded-lg border border-slate-300/60 dark:border-white/10" onclick="downloadPNG(64)">64</button>
+                  <button class="px-3 py-1.5 rounded-lg border border-slate-300/60 dark:border-white/10" onclick="downloadPNG(128)">128</button>
+                  <button class="px-3 py-1.5 rounded-lg border border-slate-300/60 dark:border-white/10" onclick="downloadPNG(256)">256</button>
+                  <button class="px-3 py-1.5 rounded-lg border border-slate-300/60 dark:border-white/10" onclick="downloadPNG(512)">512</button>
+                  <button class="px-3 py-1.5 rounded-lg border border-slate-300/60 dark:border-white/10" onclick="downloadPNG(1024)">1024</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Banner preview -->
+            <div class="mt-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-semibold">Banner 1280×640</h3>
+                <div class="flex items-center gap-2">
+                  <label class="text-sm opacity-70">Tema:</label>
+                  <select id="bannerTheme" class="bg-transparent border border-slate-300/60 dark:border-white/10 rounded-lg px-2 py-1 text-sm">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                  </select>
+                  <button class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold" onclick="downloadBanner()">Scarica</button>
+                </div>
+              </div>
+              <canvas id="bannerCanvas" width="1280" height="640" class="w-full rounded-2xl border border-slate-200 dark:border-white/10"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="mx-auto max-w-7xl px-6 py-16">
+    <h2 class="text-2xl md:text-3xl font-black">Cosa fa BuzzCord</h2>
+    <p class="mt-3 text-slate-600 dark:text-slate-300 max-w-2xl">Porta automaticamente contenuti e avvisi nel tuo server, con moderazione amichevole.</p>
+
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+      <div class="rounded-2xl border border-slate-200 dark:border-white/10 p-6 bg-white/70 dark:bg-white/[0.04]">
+        <div class="text-2xl">📰</div>
+        <h3 class="mt-2 font-semibold">Feed & Notifiche</h3>
+        <p class="mt-1 text-sm opacity-80">RSS/Atom, YouTube, Twitch, GitHub Releases — consegnati in canali dedicati, con ping opzionali.</p>
+      </div>
+      <div class="rounded-2xl border border-slate-200 dark:border-white/10 p-6 bg-white/70 dark:bg-white/[0.04]">
+        <div class="text-2xl">🛡️</div>
+        <h3 class="mt-2 font-semibold">Sicurezza</h3>
+        <p class="mt-1 text-sm opacity-80">Filtri link, timeout automatici, rate-limit sugli alert e log cane cane… ehm, <span class="font-mono">#mod-log</span> 🧾.</p>
+      </div>
+      <div class="rounded-2xl border border-slate-200 dark:border-white/10 p-6 bg-white/70 dark:bg-white/[0.04]">
+        <div class="text-2xl">⚙️</div>
+        <h3 class="mt-2 font-semibold">Setup facile</h3>
+        <p class="mt-1 text-sm opacity-80">Slash command e dashboard (roadmap). Open-source, forkabile e self-hostabile.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND KIT -->
+  <section id="brand" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="grid lg:grid-cols-2 gap-10">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-black">Brand Kit “Bolt & Bubble”</h2>
+        <ul class="mt-4 space-y-3 text-slate-700 dark:text-slate-300">
+          <li>• <strong>Simbolo:</strong> fumetto (chat bubble) con <strong>saetta rossa</strong> (alert/notifica).</li>
+          <li>• <strong>Palette:</strong> primario <span class="font-mono">#5865F2</span> + accento <span class="font-mono">#FF0000</span>.</li>
+          <li>• <strong>Stile:</strong> flat/monoline, bordi spessi (64–80px @1024), leggibile a 32×32.</li>
+          <li>• <strong>Safe area:</strong> tutto entro l’<strong>80%</strong> centrale (ok per maschera circolare).</li>
+          <li>• <strong>Varianti:</strong> PNG trasparenti multi-size, master SVG, preview light/dark, banner 1280×640.</li>
+        </ul>
+      </div>
+      <div class="rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden">
+        <div class="grid grid-cols-2">
+          <div class="bg-white p-8">
+            <div class="aspect-[16/10] rounded-xl border border-slate-200 grid place-items-center">
+              <svg viewBox="0 0 1024 1024" class="w-[60%]">
+                <rect x="160" y="160" width="560" height="420" rx="120" fill="none" stroke="#5865F2" stroke-width="80" stroke-linejoin="round"/>
+                <path d="M420 640 L420 760 L540 700" fill="none" stroke="#5865F2" stroke-width="80" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M560 260 L480 460 H604 L496 700 L720 420 H598 L660 260 Z" fill="#FF0000"/>
+              </svg>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">Preview <strong>Light</strong></p>
+          </div>
+          <div class="bg-[#0B1021] p-8">
+            <div class="aspect-[16/10] rounded-xl border border-white/10 grid place-items-center">
+              <svg viewBox="0 0 1024 1024" class="w-[60%]">
+                <rect x="160" y="160" width="560" height="420" rx="120" fill="none" stroke="#5865F2" stroke-width="80" stroke-linejoin="round"/>
+                <path d="M420 640 L420 760 L540 700" fill="none" stroke="#5865F2" stroke-width="80" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M560 260 L480 460 H604 L496 700 L720 420 H598 L660 260 Z" fill="#FF0000"/>
+              </svg>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Preview <strong>Dark</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPEN SOURCE -->
+  <section id="open-source" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-black">Open Source</h2>
+        <p class="mt-3 text-slate-600 dark:text-slate-300">
+          Il codice è pubblico su GitHub. Issue e PR sono benvenute!
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="https://github.com/Nuvexads/BuzzCord/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold px-5 py-3">
+            ⭐ Apri repo
+          </a>
+          <a href="#setup" class="inline-flex items-center gap-2 rounded-xl border border-slate-300/50 dark:border-white/10 px-5 py-3 font-semibold">
+            📦 Self-host
+          </a>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/[0.04] p-6">
+        <h3 class="font-semibold">Principi del progetto</h3>
+        <ul class="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-300">
+          <li>• Semplicità prima: config minimale, output leggibile.</li>
+          <li>• Affidabilità: code-paths testati per non perdere notifiche.</li>
+          <li>• Estendibilità: adapters per nuove sorgenti feed.</li>
+          <li>• Sicurezza: limiti, retry con backoff, protezioni link.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP -->
+  <section id="setup" class="mx-auto max-w-7xl px-6 py-16">
+    <h2 class="text-2xl md:text-3xl font-black">Setup rapido (self-host)</h2>
+    <ol class="mt-6 space-y-4 text-slate-700 dark:text-slate-300">
+      <li><strong>1)</strong> Clona il repo:
+        <pre class="mt-2 p-3 rounded-xl bg-slate-900 text-white text-sm overflow-x-auto"><code>git clone https://github.com/Nuvexads/BuzzCord.git
+cd BuzzCord</code></pre>
+      </li>
+      <li><strong>2)</strong> Installa dipendenze:
+        <pre class="mt-2 p-3 rounded-xl bg-slate-900 text-white text-sm overflow-x-auto"><code>cp .env.example .env
+npm install</code></pre>
+      </li>
+      <li><strong>3)</strong> Configura variabili ambiente (esempio):
+        <pre class="mt-2 p-3 rounded-xl bg-slate-900 text-white text-sm overflow-x-auto"><code>DISCORD_TOKEN=
+DISCORD_CLIENT_ID=
+DATABASE_URL=./data/buzzcord.db
+DEFAULT_INTERVAL_MIN=3
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
+GUILD_ID=
+</code></pre>
+      </li>
+      <li><strong>4)</strong> Avvia in dev:
+        <pre class="mt-2 p-3 rounded-xl bg-slate-900 text-white text-sm overflow-x-auto"><code>npm run deploy:commands
+npm run dev</code></pre>
+      </li>
+    </ol>
+    <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Suggerimento: crea un canale <span class="font-mono">#feed-updates</span> e limita chi può pingare @everyone.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="mt-10 border-t border-slate-200 dark:border-white/10">
+    <div class="mx-auto max-w-7xl px-6 py-10 text-center">
+
+
+      <!-- Snippet richiesto -->
+      <div class="flex items-center justify-center gap-2 mt-6">
+        <span class="text-sm text-white/70">Powered by</span>
+        <a href="https://nuvexabot.it" target="_blank" rel="noopener" class="flex items-center gap-2 group">
+          <img src="https://cdn.drester.top/images/logo.png" alt="Nuvexa Logo" class="w-6 h-6 rounded-lg shadow" />
+          <span class="font-semibold text-violet-300 group-hover:underline">Nuvexa</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    function downloadSVG() {
+      const svg = document.getElementById('buzzLogo');
+      const clone = svg.cloneNode(true);
+      clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+      const outer = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      outer.setAttribute('xmlns','http://www.w3.org/2000/svg');
+      outer.setAttribute('viewBox','0 0 1024 1024');
+      outer.appendChild(clone);
+      const blob = new Blob([outer.outerHTML], {type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = Object.assign(document.createElement('a'), { href: url, download: 'buzzcord-logo.svg' });
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+    function renderToCanvas(size, cb) {
+      const svg = document.getElementById('buzzLogo');
+      const clone = svg.cloneNode(true);
+      clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
+      const outer = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      outer.setAttribute('xmlns','http://www.w3.org/2000/svg');
+      outer.setAttribute('viewBox','0 0 1024 1024');
+      outer.appendChild(clone);
+      const xml = new XMLSerializer().serializeToString(outer);
+      const svg64 = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = 'rgba(255,255,255,0)';
+        ctx.fillRect(0,0,size,size);
+        ctx.drawImage(img, 0, 0, size, size);
+        cb(canvas);
+      };
+      img.src = svg64;
+    }
+    function downloadPNG(size) {
+      renderToCanvas(size, (canvas) => {
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = Object.assign(document.createElement('a'), { href: url, download: `buzzcord-logo-${size}.png` });
+          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        }, 'image/png');
+      });
+    }
+    const bannerCanvas = document.getElementById('bannerCanvas');
+    const bannerTheme = document.getElementById('bannerTheme');
+    function drawBanner(theme='dark') {
+      const ctx = bannerCanvas.getContext('2d');
+      const W = bannerCanvas.width, H = bannerCanvas.height;
+      const grad = ctx.createLinearGradient(0,0,W,H);
+      if (theme === 'light') {
+        grad.addColorStop(0, '#f8fafc');
+        grad.addColorStop(1, '#e2e8f0');
+        ctx.fillStyle = grad;
+      } else {
+        grad.addColorStop(0, '#0B1021');
+        grad.addColorStop(1, '#111827');
+        ctx.fillStyle = grad;
+      }
+      ctx.fillRect(0,0,W,H);
+      ctx.globalAlpha = theme === 'light' ? 0.06 : 0.08;
+      ctx.fillStyle = theme === 'light' ? '#000' : '#fff';
+      for (let x=0;x<W;x+=24) for (let y=0;y<H;y+=24) ctx.fillRect(x,y,1,1);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = theme === 'light' ? '#0b1021' : '#e5e7eb';
+      ctx.font = 'bold 72px Inter, ui-sans-serif, system-ui, -apple-system';
+      ctx.fillText('BuzzCord', 64, 140);
+      ctx.font = '500 28px Inter, ui-sans-serif, system-ui, -apple-system';
+      ctx.fillStyle = theme === 'light' ? '#334155' : '#94a3b8';
+      ctx.fillText('Feed & notifiche super veloci per Discord', 64, 180);
+      ctx.font = '600 22px Inter, ui-sans-serif';
+      ctx.fillStyle = '#5865F2';
+      ctx.fillText('#5865F2 + ', 64, 220);
+      ctx.fillStyle = '#FF0000';
+      ctx.fillText('#FF0000', 228, 220);
+      const S = 420, x0 = W - S - 64, y0 = H/2 - S/2;
+      ctx.lineWidth = 28;
+      ctx.strokeStyle = '#5865F2';
+      roundedRect(ctx, x0+40, y0+30, S*0.65, S*0.41, 40);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x0+190, y0+30+S*0.41);
+      ctx.lineTo(x0+190, y0+30+S*0.41+80);
+      ctx.lineTo(x0+270, y0+30+S*0.41+40);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.fillStyle = '#FF0000';
+      const p = [];
+      p.push([x0+290,y0+90],[x0+250,y0+200],[x0+330,y0+200],[x0+278,y0+330],[x0+408,y0+170],[x0+326,y0+170],[x0+350,y0+90]);
+      ctx.moveTo(p[0][0],p[0][1]);
+      for (let i=1;i<p.length;i++){ ctx.lineTo(p[i][0],p[i][1]); }
+      ctx.closePath(); ctx.fill();
+    }
+    function roundedRect(ctx,x,y,w,h,r){
+      ctx.beginPath();
+      ctx.moveTo(x+r,y);
+      ctx.arcTo(x+w,y,x+w,y+h,r);
+      ctx.arcTo(x+w,y+h,x,y+h,r);
+      ctx.arcTo(x,y+h,x,y,r);
+      ctx.arcTo(x,y,x+w,y,r);
+      ctx.closePath();
+    }
+    function downloadBanner() {
+      const theme = bannerTheme.value;
+      drawBanner(theme);
+      bannerCanvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement('a'), { href: url, download: `buzzcord-banner-1280x640-${theme}.png` });
+        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+    bannerTheme.addEventListener('change', () => drawBanner(bannerTheme.value));
+    drawBanner('dark');
+  </script>
+</body>
+</html>
