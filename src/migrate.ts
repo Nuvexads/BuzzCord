@@ -35,5 +35,5 @@ try {
   console.error("Migrazione fallita:", e);
   process.exitCode = 1;
 } finally {
-  try { (db as any).close?.(); } catch {}
+  try { (db as any).close?.(); } catch (e) { void e; }
 }
